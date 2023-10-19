@@ -1,21 +1,29 @@
 %{
-
-#include<stdio.h>
-int lc=0, sc=0, wc=0, cc=0;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+char alphabetList[1000] = "";
+char numberList[1000] = "";  
 %}
 
-%% 
-[\n] {lc++; cc+=yyleng;} 
-[ \t] {sc++; cc+=yyleng;} 
-[^\t\n ]+ {wc++; cc+=yyleng;} 
 %%
-int yywrap(){}
+[0-9]+  { strcat(numberList, yytext); }
+[a-zA-Z]+ { strcat(alphabetList, yytext); }
+. { printf("Invalid input: %s\n", yytext); }
 
-int main()
-{
-printf("Enter the input: \n");
-yylex();
-printf("No. of words are: %d\n", wc);
-printf("No. of characters are: %d\n", cc);
-printf("No. of new lines are: %d\n", lc); printf("No. of spaces are: %d\n", sc);
+%%
+
+int yywrap() {
+    printf("Alphabets: %s\n", alphabetList);
+    printf("Numbers: %s\n", numberList);
+    return 1;
+}
+
+int main() {
+    char input[100];
+    printf("Enter the input: ");
+    fgets(input, sizeof(input), stdin);
+    yy_scan_string(input);
+    yylex();
+    return 0;
 }
