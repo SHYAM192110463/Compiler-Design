@@ -1,17 +1,15 @@
 %{
-int line_number = 1; 
+
+int ln = 0;
 %}
-line .*\n
 %%
-{line} { printf("%10d %s", line_number++, yytext); } 
-  
+.* {ln++;fprintf(yyout,"\n %d %s",ln,yytext);}
 %%
-  
-int yywrap(){} 
-  
-int main(int argc, char* argv[])
-{   
-yyin = fopen(argv[1],"r");  
+int yywrap(){}
+
+int main()
+{
+yyin=fopen("simple.txt","r");
+yyout=fopen("out.txt","w");
 yylex();
-return 0;
-}
+} 
